@@ -84,7 +84,7 @@ int main()
     basaElemanEkle(&head,"ddd",3);// 3-5
     basaElemanEkle(&head,"aaa",2);// 2-3-5
     sonaElemanEkle(&head,"sss",4);// 2-3-5-4
-    arkasinaElemanEkle(head->next, "abc", 6);//2-3-6-5-4
+    arkasinaElemanEkle(head->next,"abc", 6);//2-3-6-5-4
 
     printf("\nYaratilan liste:\n");
     yazdir(head);
