@@ -88,7 +88,7 @@ int main()
     arkasinaElemanEkle(head->next,"abc",6);//2-3-6-5-4
 
     printf("\nYaratilan liste:\n");
-    yazdir(head);
+    yazdir(head);//bas kismi yolla
 
     return 0;
 }
