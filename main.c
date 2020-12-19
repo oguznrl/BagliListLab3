@@ -80,8 +80,8 @@ int main()
     fclose(dosya);
 
     struct dugum* head =NULL;
-    sonaElemanEkle(&head,"asd",5);// 5
     //linked list'in basini, kelimeyi ve kelime sayisini yolla
+    sonaElemanEkle(&head,"asd",5);// 5
     basaElemanEkle(&head,"ddd",3);// 3-5
     basaElemanEkle(&head,"aaa",2);// 2-3-5
     sonaElemanEkle(&head,"sss",4);// 2-3-5-4
