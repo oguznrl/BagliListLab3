@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include<stdbool.h>
+#include <ctype.h>
 char *text="C:\\Users\\oguzn\\OneDrive\\Masaüstü\\proje3.txt";
 int b=0;
 struct Node {
@@ -20,9 +21,6 @@ void basaEkle(struct Node** ref, char *kelime,int adet) {
     new_node->adet  = adet;
 
     new_node->next = (*ref);
-
-
-
     (*ref)    = new_node;
 
 }
@@ -80,7 +78,7 @@ int ara(struct Node **head, char *kel)
     if(strcmp(temp->kelime,kel)==0){
         temp->adet++;
         b=0;
-        return 1;
+        return 0;
     }
     else{
     b++;
@@ -125,17 +123,22 @@ int main() {
     if(kelime==NULL){
         break;
         }
+
+    if(isprint(kelime[strlen(kelime)-1])==0){
+        kelime[strlen(kelime)-1]='\0';
+    }
     if(ara(&head,kelime)==true){
+
         if(deg->adet>head->adet){
             basaEkle(&head,deg->kelime,deg->adet);
         }
         else if(b!=0){
-
             sonrakiDugumeEkle(&head,deg);
             b=0;
         }
 
     }
+    else if(b==0);
     else
     sonaEkle(&head,kelime);
     }
