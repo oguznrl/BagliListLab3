@@ -1,94 +1,142 @@
 #include <stdio.h>
 #include <stdlib.h>
-char *file_path="C:\\Users\\tanal\\Desktop\\proje3.txt";
-
-struct dugum{
-char *kelime;
-int kelime_adet;
-struct dugum* next;
+#include <string.h>
+#include<stdbool.h>
+char *text="C:\\Users\\oguzn\\OneDrive\\Masaüstü\\proje3.txt";
+int b=0;
+struct Node {
+  char *kelime;
+  int adet;
+  struct Node* next;
 };
+struct Node* deg=NULL;
 
-void yazdir(struct dugum* n){
-    int i=1;
-    while(n!=NULL){
-        printf("%d. %s ",i,n->kelime);
-        printf("%d\n",n->kelime_adet);
-        n=n->next;
-        i++;
-    }
+void basaEkle(struct Node** ref, struct Node* eklenecek) {
+
+
+  eklenecek->next = (*ref);
+
+  (*ref) = eklenecek;
 }
 
-void basaElemanEkle(struct dugum** head_ref, char *y_kelime, int y_kelime_adet){
-    struct dugum* yeni_dugum = (struct dugum*) malloc(sizeof(struct dugum));
 
-    yeni_dugum->kelime = y_kelime;
-    yeni_dugum->kelime_adet = y_kelime_adet;
-    yeni_dugum->next = (*head_ref);
-    (*head_ref) = yeni_dugum;
+void sonrakiDugumeEkle(struct Node** ref,struct Node* eklenecek) {
+
+  struct Node* temp = *ref;
+  struct Node* dolas = temp->next;
+  while(dolas!=NULL){
+    if(eklenecek->adet>dolas->adet){
+        eklenecek->next=dolas;
+        temp->next=eklenecek;
+        break;
+    }
+    temp=dolas;
+    dolas=dolas->next;
+  }
+
 }
 
-void arkasinaElemanEkle(struct dugum* prev_node, char *y_kelime, int y_kelime_adet){
-    if(prev_node==NULL){
-        printf("Referans verilen onceki dugum bos olamaz.");
-        return;
-    }
+void sonaEkle(struct Node** ref, char* kel) {
+  struct Node* yeni_dugum = (struct Node*)malloc(sizeof(struct Node));
+  struct Node* son = *ref;
 
-    struct dugum* yeni_dugum =(struct dugum*) malloc(sizeof(struct dugum));
+  yeni_dugum->kelime= kel;
+  yeni_dugum->adet= 1;
+  yeni_dugum->next = NULL;
 
-    yeni_dugum->kelime = y_kelime;
-    yeni_dugum->kelime_adet= y_kelime_adet;
-    yeni_dugum->next = prev_node->next;
-    prev_node->next = yeni_dugum;
-}
-
-void sonaElemanEkle(struct dugum** head_ref, char *y_kelime, int y_kelimeadet){
-    struct dugum* yeni_dugum =(struct dugum*) malloc(sizeof(struct dugum));
-    struct dugum *son = *head_ref;
-
-    yeni_dugum->kelime= y_kelime;
-    yeni_dugum->kelime_adet=y_kelimeadet;
-    yeni_dugum->next=NULL;
-
-    if(*head_ref==NULL)
-    {
-        *head_ref=yeni_dugum;
-        return;
-    }
-    while(son->next != NULL)
-        son= son->next;
-
-    son->next=yeni_dugum;
+  if (*ref == NULL) {
+    *ref = yeni_dugum;
     return;
+  }
+
+  while (son->next != NULL)
+    son = son->next;
+
+  son->next = yeni_dugum;
+  return;
 }
 
 
-int main()
-{
+void yazdir(struct Node* node) {
+    int i=1;
+  while (node != NULL) {
+    printf("%d. %s %d \n",i, node->kelime,node->adet);
+    node = node->next;
+    i++;
+  }
+}
 
-    FILE *dosya=fopen(file_path,"r");
-    if(dosya==NULL){
-        printf("Dosya acilamadi.\n");
+int ara(struct Node **head, char *kel)
+{   struct Node* temp=*head;
+    struct Node* temp2=NULL;
+    if(strcmp(temp->kelime,kel)==0){
+        temp->adet++;
+        printf("girdi");
+        return 1;
     }
     else{
-        printf("Dosya acildi.\n");
+    b++;
+    temp2=temp;
+    temp->next;
+    while (temp != NULL)
+    {
+        if (strcmp(temp->kelime,kel)==0)
+        {   temp->adet++;
+            temp2->next=temp->next;
+            deg=temp;
+            deg->next=NULL;
+            return 1;
+        }
+        temp2=temp;
+        temp = temp->next;
+    }
+}
+    return 0;
+}
+
+
+int main() {
+  struct Node* head = NULL;
+  FILE *f=fopen(text,"r");
+  char metin[500000];
+  if(f==NULL){
+    printf("Dosya bulunamadi!");
+  }
+  else{
+  for(int i=0;!feof(f);i++){
+    metin[i]=getc(f);
+  }
+  }
+  char *kelime;
+  kelime=strtok(metin," \n");
+  sonaEkle(&head,kelime);
+
+  while(1){
+
+    kelime=strtok(NULL," \n");
+
+    //if(kelime[strlen(kelime)-1]==' ')kelime[strlen(kelime)-1]='\0';
+    if(kelime==NULL){
+        break;
+        }
+    if(ara(&head,kelime)==true){
+        if(deg->adet>head->adet){
+            printf("%s %s %d\n",deg->kelime,head->kelime);
+            //basaEkle(&head,deg);
+        }
+        if(b!=0){
+            sonrakiDugumeEkle(&head,deg);
+            b=0;
+        }
+
+    }
+    else
+    sonaEkle(&head,kelime);
+
     }
 
-    while(!feof(dosya))
-        printf("%c",fgetc(dosya));
 
-    printf("\n");
-    fclose(dosya);
-
-    struct dugum* head =NULL;
-    //linked list'in basini, kelimeyi ve kelime sayisini yolla
-    sonaElemanEkle(&head,"asd",5);// 5
-    basaElemanEkle(&head,"ddd",3);// 3-5
-    basaElemanEkle(&head,"aaa",2);// 2-3-5
-    sonaElemanEkle(&head,"sss",4);// 2-3-5-4
-    arkasinaElemanEkle(head->next,"abc",6);//2-3-6-5-4
-
-    printf("\nYaratilan liste:\n");
-    yazdir(head);//bas kismi yolla
-
-    return 0;
+  fclose(f);
+ yazdir(head);
+  return 0;
 }

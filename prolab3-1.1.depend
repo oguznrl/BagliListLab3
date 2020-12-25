@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1608911880 source:c:\users\oguzn\onedrive\masaüstü\prolab3-1.1\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+
