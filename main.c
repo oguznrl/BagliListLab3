@@ -11,12 +11,20 @@ struct Node {
 };
 struct Node* deg=NULL;
 
-void basaEkle(struct Node** ref, struct Node* eklenecek) {
+void basaEkle(struct Node** ref, char *kelime,int adet) {
+
+  struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
 
 
-  eklenecek->next = (*ref);
+    new_node->kelime  = kelime;
+    new_node->adet  = adet;
 
-  (*ref) = eklenecek;
+    new_node->next = (*ref);
+
+
+
+    (*ref)    = new_node;
+
 }
 
 
@@ -71,20 +79,19 @@ int ara(struct Node **head, char *kel)
     struct Node* temp2=NULL;
     if(strcmp(temp->kelime,kel)==0){
         temp->adet++;
-        printf("girdi");
+        b=0;
         return 1;
     }
     else{
     b++;
     temp2=temp;
-    temp->next;
+    temp=temp->next;
     while (temp != NULL)
     {
         if (strcmp(temp->kelime,kel)==0)
         {   temp->adet++;
             temp2->next=temp->next;
             deg=temp;
-            deg->next=NULL;
             return 1;
         }
         temp2=temp;
@@ -115,16 +122,15 @@ int main() {
 
     kelime=strtok(NULL," \n");
 
-    //if(kelime[strlen(kelime)-1]==' ')kelime[strlen(kelime)-1]='\0';
     if(kelime==NULL){
         break;
         }
     if(ara(&head,kelime)==true){
         if(deg->adet>head->adet){
-            printf("%s %s %d\n",deg->kelime,head->kelime);
-            //basaEkle(&head,deg);
+            basaEkle(&head,deg->kelime,deg->adet);
         }
-        if(b!=0){
+        else if(b!=0){
+
             sonrakiDugumeEkle(&head,deg);
             b=0;
         }
@@ -132,11 +138,10 @@ int main() {
     }
     else
     sonaEkle(&head,kelime);
-
     }
 
 
   fclose(f);
- yazdir(head);
+  yazdir(head);
   return 0;
 }
